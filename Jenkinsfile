@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git url: 'https://github.com/nigelhenn/CI_CD_Pipeline_Demo.git', branch: 'main'
+        git url: 'https://github.com/nigelhenn/SMBC_CI_CD_Pipeline_Demo.git', branch: 'main'
       }
     }
 
