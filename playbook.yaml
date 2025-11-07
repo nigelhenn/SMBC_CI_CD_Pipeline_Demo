@@ -97,7 +97,7 @@
           <body>
             <header>
               <h1>SMBC Bank – CI/CD Pipeline Demo</h1>
-              <img src="https://upload.wikimedia.org/wikipedia/en/0/0a/SMBC_logo.svg" alt="SMBC Bank Logo" />
+              <img src="https://raw.githubusercontent.com/nigelhenn/SMBC_CI_CD_Pipeline_Demo/main/assets/SMBC_logo.svg" alt="SMBC Bank Logo" />
             </header>
 
             <main>
