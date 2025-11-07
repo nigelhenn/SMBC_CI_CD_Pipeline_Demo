@@ -1,7 +1,7 @@
 # 🚀 Basic CI/CD Pipeline Demo
 
 This project showcases a simple yet complete **CI/CD pipeline** built using modern DevOps tools and deployed on **AWS**.  
-It was created for **Kneat Solutions** on **Saturday, 25th October 2025**.
+It was created for **SMBC Bank** on **Saturday, 8th November 2025**.
 
 ---
 
@@ -68,7 +68,7 @@ This demo integrates **Infrastructure as Code**, **automation**, and **configura
 ---
 
 **Created by:** [Nigel H](#)  
-**Date:** Saturday, 25th October 2025  
-**For:** Kneat Solutions
+**Date:** Saturday, 8th November 2025  
+**For:** SMBC Bank
 
 ---

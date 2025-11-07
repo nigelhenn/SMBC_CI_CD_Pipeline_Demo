@@ -21,58 +21,107 @@
         state: started
         enabled: true
 
-    - name: Create AWS-themed HTML page for pipeline demo
+    - name: Create SMBC Bank-themed HTML page for pipeline demo
       copy:
         dest: /var/www/html/index.html
         content: |
           <!DOCTYPE html>
           <html lang="en">
           <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>CI/CD Pipeline Demo</title>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>SMBC Bank | CI/CD Pipeline Demo</title>
             <style>
               body {
-                font-family: "Amazon Ember", "Helvetica Neue", Arial, sans-serif;
-                background-color: #ffffff;
-                color: #232f3e;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 margin: 0;
-                padding: 0;
+                background-color: #f5f6f7;
+                color: #333;
               }
               header {
-                background-color: #232f3e;
-                color: #ffffff;
-                padding: 20px;
-                text-align: center;
+                background-color: #006341; /* SMBC green */
+                color: white;
+                padding: 20px 40px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+              }
+              header h1 {
+                margin: 0;
+                font-size: 1.8rem;
+              }
+              header img {
+                height: 50px;
               }
               main {
-                padding: 40px;
                 text-align: center;
+                padding: 60px 20px;
               }
-              h1 {
-                color: #ff9900;
+              h2 {
+                color: #006341;
+                margin-bottom: 10px;
               }
-              .card {
-                background-color: #f3f3f3;
-                border-radius: 8px;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+              .pipeline {
+                background: white;
+                margin: 40px auto;
+                max-width: 800px;
                 padding: 30px;
-                max-width: 700px;
-                margin: 0 auto;
+                border-radius: 10px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                text-align: left;
+              }
+              .pipeline h3 {
+                color: #d4af37; /* SMBC gold accent */
+                border-bottom: 2px solid #006341;
+                padding-bottom: 5px;
+              }
+              footer {
+                background: #003820;
+                color: #ccc;
+                padding: 15px 20px;
+                text-align: center;
+                font-size: 0.9em;
+              }
+              .badge {
+                display: inline-block;
+                background: #d4af37;
+                color: #003820;
+                padding: 3px 10px;
+                border-radius: 5px;
+                font-weight: bold;
+                font-size: 0.85em;
+                margin-right: 6px;
               }
             </style>
           </head>
           <body>
             <header>
-              <h1>Kneat Solutions - CI/CD Pipeline Demo</h1>
+              <h1>SMBC Bank – CI/CD Pipeline Demo</h1>
+              <img src="https://upload.wikimedia.org/wikipedia/en/0/0a/SMBC_logo.svg" alt="SMBC Bank Logo" />
             </header>
+
             <main>
-              <div class="card">
-                <h2>Nigel Hennigar's Interview CI/CD Pipeline Demo</h2>
-                <p>Created using <strong>GitHub</strong>, <strong>Terraform</strong>, <strong>Docker</strong>, <strong>Jenkins</strong>, and <strong>Ansible</strong> in <strong>AWS</strong> for <strong>Kneat Solutions</strong>.</p>
-                <p><em>Tuesday, 28th October 2025</em></p>
+              <h2>Automating Secure & Compliant Deployments</h2>
+              <p>This demo showcases a fully automated CI/CD pipeline built for <strong>SMBC Bank</strong>, highlighting secure infrastructure provisioning, policy-as-code, and end-to-end delivery to AWS.</p>
+
+              <div class="pipeline">
+                <h3>Pipeline Overview</h3>
+                <ul>
+                  <li><span class="badge">1</span> <strong>Source:</strong> Code committed to GitHub triggers Jenkins.</li>
+                  <li><span class="badge">2</span> <strong>Build:</strong> Docker image created and scanned for vulnerabilities.</li>
+                  <li><span class="badge">3</span> <strong>Infrastructure:</strong> Terraform provisions cloud resources following SMBC compliance standards.</li>
+                  <li><span class="badge">4</span> <strong>Configuration:</strong> Ansible applies security-hardened configurations.</li>
+                  <li><span class="badge">5</span> <strong>Deploy:</strong> Application deployed across environments (Dev → Test → Prod).</li>
+                  <li><span class="badge">6</span> <strong>Monitor:</strong> Logs, metrics, and alerts integrated with CloudWatch.</li>
+                </ul>
               </div>
+
+              <p><em>Version:</em> 1.0 – <em>Deployed on:</em> <script>document.write(new Date().toLocaleDateString());</script></p>
             </main>
+
+            <footer>
+              &copy; <script>document.write(new Date().getFullYear());</script> SMBC Bank. Demonstration project for DevOps/CI-CD best practices.
+            </footer>
           </body>
           </html>
       notify:
