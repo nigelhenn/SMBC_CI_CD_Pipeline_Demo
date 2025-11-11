@@ -3,7 +3,7 @@ variable "region" {
 }
 
 variable "instance_count" {
-  default = 10
+  default = 8
 }
 
 variable "ami_id" {

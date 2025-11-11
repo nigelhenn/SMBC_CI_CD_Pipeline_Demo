@@ -28,32 +28,36 @@
     }
     main {
       text-align: center;
-      padding: 60px 20px;
+      padding: 40px 20px;
     }
     h2 {
       color: #006341;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
-    .pipeline {
+    .pipeline, .status-card {
       background: white;
-      margin: 40px auto;
+      margin: 30px auto;
       max-width: 800px;
-      padding: 30px;
+      padding: 25px 30px;
       border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
       text-align: left;
+      transition: transform 0.2s ease;
     }
-    .pipeline h3 {
+    .pipeline:hover, .status-card:hover {
+      transform: translateY(-3px);
+    }
+    .pipeline h3, .status-card h3 {
       color: #d4af37; /* SMBC gold accent */
       border-bottom: 2px solid #006341;
       padding-bottom: 5px;
+      margin-bottom: 15px;
     }
-    footer {
-      background: #003820;
-      color: #ccc;
-      padding: 15px 20px;
-      text-align: center;
-      font-size: 0.9em;
+    ul {
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 10px;
     }
     .badge {
       display: inline-block;
@@ -64,6 +68,26 @@
       font-weight: bold;
       font-size: 0.85em;
       margin-right: 6px;
+      transition: background 0.2s ease;
+    }
+    .badge:hover {
+      background: #c59b2c;
+    }
+    .status {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    .status.green { background: #28a745; }
+    .status.red { background: #dc3545; }
+    footer {
+      background: #003820;
+      color: #ccc;
+      padding: 15px 20px;
+      text-align: center;
+      font-size: 0.9em;
     }
   </style>
 </head>
@@ -71,22 +95,28 @@
   <header>
     <h1>SMBC Bank – CI/CD Pipeline Demo</h1>
     <img src="https://raw.githubusercontent.com/nigelhenn/SMBC_CI_CD_Pipeline_Demo/main/assets/SMBC_logo.svg" alt="SMBC Bank Logo" />
-" alt="SMBC Bank Logo" />
   </header>
 
   <main>
     <h2>Automating Secure & Compliant Deployments</h2>
     <p>This demo showcases a fully automated CI/CD pipeline built for <strong>SMBC Bank</strong>, highlighting secure infrastructure provisioning, policy-as-code, and end-to-end delivery to AWS.</p>
 
+    <div class="status-card">
+      <h3>Environment Status</h3>
+      <p><strong>Environment:</strong> Dev</p>
+      <p><strong>Deployed Instances:</strong> 3</p>
+      <p><span class="status green"></span> All instances healthy</p>
+    </div>
+
     <div class="pipeline">
       <h3>Pipeline Overview</h3>
       <ul>
-        <li><span class="badge">1</span> <strong>Source:</strong> Code committed to GitHub triggers Jenkins.</li>
-        <li><span class="badge">2</span> <strong>Build:</strong> Docker image created and scanned for vulnerabilities.</li>
-        <li><span class="badge">3</span> <strong>Infrastructure:</strong> Terraform provisions cloud resources following SMBC compliance standards.</li>
-        <li><span class="badge">4</span> <strong>Configuration:</strong> Ansible applies security-hardened configurations.</li>
-        <li><span class="badge">5</span> <strong>Deploy:</strong> Application deployed across environments (Dev → Test → Prod).</li>
-        <li><span class="badge">6</span> <strong>Monitor:</strong> Logs, metrics, and alerts integrated with CloudWatch.</li>
+        <li><span class="badge">1</span> <strong>Source:</strong> GitHub triggers Jenkins.</li>
+        <li><span class="badge">2</span> <strong>Build:</strong> Docker image created & scanned.</li>
+        <li><span class="badge">3</span> <strong>Infra:</strong> Terraform provisions AWS resources.</li>
+        <li><span class="badge">4</span> <strong>Config:</strong> Ansible applies security configs.</li>
+        <li><span class="badge">5</span> <strong>Deploy:</strong> Dev → Test → Prod environments.</li>
+        <li><span class="badge">6</span> <strong>Monitor:</strong> Logs, metrics, and alerts.</li>
       </ul>
     </div>
 
@@ -94,7 +124,7 @@
   </main>
 
   <footer>
-    &copy; <script>document.write(new Date().getFullYear());</script> SMBC Bank. Demonstration project for DevOps/CI-CD best practices.
+    &copy; <script>document.write(new Date().getFullYear());</script> SMBC Bank. Demo project for DevOps/CI-CD best practices.
   </footer>
 </body>
 </html>
