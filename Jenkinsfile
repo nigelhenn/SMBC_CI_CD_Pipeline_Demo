@@ -13,7 +13,7 @@ pipeline {
       }
     }
 
-    stage('Terraform Init') {
+    stage('Init') {
       steps {
         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'Terraform']]) {
           sh 'terraform init'
@@ -21,7 +21,7 @@ pipeline {
       }
     }
 
-    stage('Terraform Validate') {
+    stage('Validate') {
       steps {
         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'Terraform']]) {
           sh 'terraform validate'
@@ -29,7 +29,7 @@ pipeline {
       }
     }
 
-    stage('Terraform Plan') {
+    stage('Plan') {
       steps {
         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'Terraform']]) {
           sh 'terraform plan -out=tfplan'
@@ -37,15 +37,15 @@ pipeline {
       }
     }
 
-    stage('Terraform Apply') {
+    stage('Apply') {
       steps {
-        input message: 'Approve Terraform Apply?'
+        input message: 'Approve Apply?'
         withCredentials([
           [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'Terraform'],
           file(credentialsId: 'terraform-key', variable: 'TF_KEY')
         ]) {
           sh '''
-            echo "Applying Terraform plan using AWS and SSH credentials..."
+            echo "Applying Terraform plan..."
             export TF_VAR_private_key_path=$TF_KEY
             terraform apply -auto-approve tfplan
           '''
@@ -53,7 +53,7 @@ pipeline {
       }
     }
 
-    stage('Generate Ansible Inventory') {
+    stage('Inventory') {
       steps {
         withCredentials([
           file(credentialsId: 'terraform-key', variable: 'TF_KEY')
@@ -73,21 +73,21 @@ pipeline {
       }
     }
 
-    stage('Run Ansible Playbook') {
+    stage('Deploy') {
       steps {
         withCredentials([
           [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'Terraform'],
           file(credentialsId: 'terraform-key', variable: 'TF_KEY')
         ]) {
           sh '''
-            echo "Running Ansible playbook with SSH key..."
+            echo "Running Ansible playbook..."
             ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.yaml -u ec2-user --private-key "$TF_KEY" playbook.yaml
           '''
         }
       }
     }
 
-    stage('Health Check') {
+    stage('Health') {
       steps {
         script {
           def tfOutput = readJSON file: 'tf_output.json'
@@ -97,24 +97,24 @@ pipeline {
             echo "No IPs found — skipping health check."
           } else {
             ips.each { ip ->
-              echo "Running health check on ${ip} ..."
+              echo "Checking ${ip} ..."
               def status = sh(
                 script: "curl -s -o /dev/null -w '%{http_code}' http://${ip}",
                 returnStdout: true
               ).trim()
 
               if (status == '200') {
-                echo "✅ ${ip} is healthy (HTTP ${status})"
+                echo "✅ ${ip} healthy"
               } else {
-                echo "❌ ${ip} failed health check (HTTP ${status})"
-                error("One or more instances failed the health check.")
+                echo "❌ ${ip} failed"
+                error("One or more instances failed health check.")
               }
             }
           }
         }
       }
     }
-  } // end of stages
+  }
 
   post {
     always {
