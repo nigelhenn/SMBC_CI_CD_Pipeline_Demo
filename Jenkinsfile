@@ -92,6 +92,35 @@ pipeline {
     }
   }
 
+    stage('Health Check') {
+      steps {
+        script {
+          def tfOutput = readJSON file: 'tf_output.json'
+          def ips = tfOutput.web_instance_ips?.value ?: []
+
+          if (ips.isEmpty()) {
+            echo "No IPs found — skipping health check."
+          } else {
+            ips.each { ip ->
+              echo "Running health check on ${ip} ..."
+              def status = sh(
+                script: "curl -s -o /dev/null -w '%{http_code}' http://${ip}",
+                returnStdout: true
+              ).trim()
+
+              if (status == '200') {
+                echo "✅ ${ip} is healthy (HTTP ${status})"
+              } else {
+                echo "❌ ${ip} failed health check (HTTP ${status})"
+                error("One or more instances failed the health check.")
+              }
+            }
+          }
+        }
+      }
+    }
+    
+
   post {
     always {
       cleanWs()
