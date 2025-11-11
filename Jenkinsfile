@@ -64,11 +64,7 @@ pipeline {
             def ips = tfOutput.web_instance_ips?.value ?: []
             def inventory = [
               all: [
-                hosts: ips.collectEntries { ip ->
-                  [ (ip): [
-                    ansible_user: "ec2-user"
-                  ]]
-                }
+                hosts: ips.collectEntries { ip -> [(ip): [ansible_user: "ec2-user"]] }
               ]
             ]
             writeFile file: 'inventory.yaml', text: groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(inventory))
@@ -90,7 +86,6 @@ pipeline {
         }
       }
     }
-  }
 
     stage('Health Check') {
       steps {
@@ -119,7 +114,7 @@ pipeline {
         }
       }
     }
-    
+  } // end of stages
 
   post {
     always {
