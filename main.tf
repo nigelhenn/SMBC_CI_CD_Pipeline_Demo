@@ -11,6 +11,8 @@ resource "aws_instance" "web" {
   security_groups = var.security_groups
 
   tags = {
-    Name = "web-${count.index + 1}"
+    Name = "smbc-${count.index + 1}"
+    Environment = var.environment
+    Project     = "SMBC_CI_CD_Demo"
   }
 }
