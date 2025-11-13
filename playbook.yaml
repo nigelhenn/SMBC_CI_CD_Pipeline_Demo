@@ -128,8 +128,8 @@
                   <li><span class="badge">6</span> <strong>Monitor:</strong> Logs, metrics, and alerts.</li>
                 </ul>
               </div>
-              <p><em>Version:</em> 1.0 – <em>Deployed on:</em> <script>document.write(new Date().toLocaleDateString());</script></p>
               <p><strong>Instance Public IP:</strong> {{ aws_ip.content }}</p>
+              <p><em>Version:</em> 1.0 – <em>Deployed on:</em> <script>document.write(new Date().toLocaleDateString());</script></p>
             </main>
             <footer>
               &copy; <script>document.write(new Date().getFullYear());</script> SMBC Bank. Demo project for DevOps/CI-CD best practices.
