@@ -148,8 +148,7 @@
     - name: Final summary
       debug:
         msg: >
-          ✅ {{ inventory_hostname }} configured successfully!
-          Website: http://{{ aws_ip.content }}
+          ✅ {{ inventory_hostname }} configured successfully! Website: http://{{ aws_ip.content }}
 
   handlers:
     - name: Reload Apache
