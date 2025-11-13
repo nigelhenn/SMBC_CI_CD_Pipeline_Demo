@@ -219,14 +219,14 @@
         path: /var/log/deployment.log
         create: yes
         line: "Deployment completed on {{ ansible_date_time.iso8601 }} from Jenkins pipeline. Public IP: {{ aws_ip.content }}"
-        
+
     - name: Final summary
       debug:
         msg: >
           ✅ {{ inventory_hostname }} configured successfully!
           Website: http://{{ aws_ip.content }}
 
-    handlers:
+  handlers:
     - name: Reload Apache
       service:
         name: httpd
