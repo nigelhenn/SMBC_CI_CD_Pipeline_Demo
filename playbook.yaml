@@ -14,7 +14,6 @@
       yum:
         name: "*"
         state: latest
-    
 
     - name: Ensure Apache is installed
       yum:
@@ -232,4 +231,7 @@
         name: httpd
         state: reloaded
 
-    
+    - name: Reload firewalld
+      service:
+        name: firewalld
+        state: reloaded
