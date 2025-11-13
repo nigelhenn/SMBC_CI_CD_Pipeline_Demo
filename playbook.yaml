@@ -1,8 +1,9 @@
+---
 - name: Configure EC2 instance
   hosts: all
   remote_user: ec2-user
   become: yes
-  gather_facts: false
+  gather_facts: true  # changed to true so ansible_date_time works
 
   tasks:
     - name: Wait for SSH to become available
@@ -47,148 +48,6 @@
         - ssh
       notify: Reload firewalld
 
-    - name: Create SMBC Bank-themed HTML page for pipeline demo
-      copy:
-        dest: /var/www/html/index.html
-        content: |
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-            <meta charset="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title>SMBC Bank | CI/CD Pipeline Demo</title>
-            <style>
-              body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                margin: 0;
-                background-color: #f5f6f7;
-                color: #333;
-              }
-              header {
-                background-color: #006341;
-                color: white;
-                padding: 15px 30px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-              }
-              header h1 {
-                margin: 0;
-                font-size: 1.5rem;
-              }
-              header img {
-                height: 50px;
-              }
-              .hero {
-                background: linear-gradient(rgba(0, 99, 65, 0.7), rgba(0, 99, 65, 0.7)), url('https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1470&q=80');
-                background-size: cover;
-                background-position: center;
-                color: white;
-                padding: 100px 20px;
-                text-align: center;
-              }
-              .hero h2 {
-                font-size: 2.5rem;
-                margin: 0 0 15px;
-              }
-              .hero p {
-                font-size: 1.2rem;
-                margin: 0;
-              }
-              main {
-                max-width: 900px;
-                margin: 0 auto;
-                padding: 40px 20px;
-              }
-              .pipeline, .status-card {
-                background: white;
-                margin: 30px 0;
-                padding: 25px 30px;
-                border-radius: 10px;
-                box-shadow: 0 3px 8px rgba(0,0,0,0.12);
-                text-align: left;
-                transition: transform 0.2s ease;
-              }
-              .pipeline:hover, .status-card:hover {
-                transform: translateY(-3px);
-              }
-              .pipeline h3, .status-card h3 {
-                color: #d4af37;
-                border-bottom: 2px solid #006341;
-                padding-bottom: 5px;
-                margin-bottom: 15px;
-              }
-              .badge {
-                display: inline-block;
-                background: #d4af37;
-                color: #003820;
-                padding: 3px 10px;
-                border-radius: 5px;
-                font-weight: bold;
-                font-size: 0.85em;
-                margin-right: 6px;
-              }
-              .status {
-                display: inline-block;
-                width: 12px;
-                height: 12px;
-                border-radius: 50%;
-                margin-right: 8px;
-              }
-              .status.green { background: #28a745; }
-              .status.red { background: #dc3545; }
-              footer {
-                background: #003820;
-                color: #ccc;
-                padding: 15px 20px;
-                text-align: center;
-                font-size: 0.9em;
-              }
-            </style>
-          </head>
-          <body>
-            <header>
-              <h1>SMBC Bank – CI/CD Demo</h1>
-              <img src="https://raw.githubusercontent.com/nigelhenn/SMBC_CI_CD_Pipeline_Demo/main/assets/SMBC_logo.svg" alt="SMBC Bank Logo" />
-            </header>
-
-            <section class="hero">
-              <h2>Automating Secure & Compliant Deployments</h2>
-              <p>End-to-end CI/CD pipeline demo for SMBC Bank: Terraform, Ansible, Jenkins, and AWS in action.</p>
-            </section>
-
-            <main>
-              <div class="status-card">
-                <h3>Environment Status</h3>
-                <p><strong>Environment:</strong> Dev</p>
-                <p><strong>Deployed Instances:</strong> 8</p>
-                <p><span class="status green"></span> All instances healthy</p>
-              </div>
-
-              <div class="pipeline">
-                <h3>Pipeline Overview</h3>
-                <ul>
-                  <li><span class="badge">1</span> <strong>Source:</strong> GitHub triggers Jenkins.</li>
-                  <li><span class="badge">2</span> <strong>Build:</strong> Docker image created & scanned.</li>
-                  <li><span class="badge">3</span> <strong>Infra:</strong> Terraform provisions AWS resources.</li>
-                  <li><span class="badge">4</span> <strong>Config:</strong> Ansible applies security configs.</li>
-                  <li><span class="badge">5</span> <strong>Deploy:</strong> Dev → Test → Prod environments.</li>
-                  <li><span class="badge">6</span> <strong>Monitor:</strong> Logs, metrics, and alerts.</li>
-                </ul>
-              </div>
-
-              <p><em>Version:</em> 1.0 – <em>Deployed on:</em> <script>document.write(new Date().toLocaleDateString());</script></p>
-              <p><strong>Instance Public IP:</strong> {{ aws_ip.content }}</p>
-            </main>
-
-            <footer>
-              &copy; <script>document.write(new Date().getFullYear());</script> SMBC Bank. Demo project for DevOps/CI-CD best practices.
-            </footer>
-          </body>
-          </html>
-      notify:
-        - Reload Apache
-
     - name: Get IMDSv2 token
       uri:
         url: http://169.254.169.254/latest/api/token
@@ -212,6 +71,73 @@
     - name: Display AWS public IP
       debug:
         var: aws_ip.content
+
+    - name: Create SMBC Bank-themed HTML page for pipeline demo
+      copy:
+        dest: /var/www/html/index.html
+        content: |
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>SMBC Bank | CI/CD Pipeline Demo</title>
+            <style>
+              body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f5f6f7; color: #333; }
+              header { background-color: #006341; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+              header h1 { margin: 0; font-size: 1.5rem; }
+              header img { height: 50px; }
+              .hero { background: linear-gradient(rgba(0, 99, 65, 0.7), rgba(0, 99, 65, 0.7)), url('https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1470&q=80'); background-size: cover; background-position: center; color: white; padding: 100px 20px; text-align: center; }
+              .hero h2 { font-size: 2.5rem; margin: 0 0 15px; }
+              .hero p { font-size: 1.2rem; margin: 0; }
+              main { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+              .pipeline, .status-card { background: white; margin: 30px 0; padding: 25px 30px; border-radius: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.12); text-align: left; transition: transform 0.2s ease; }
+              .pipeline:hover, .status-card:hover { transform: translateY(-3px); }
+              .pipeline h3, .status-card h3 { color: #d4af37; border-bottom: 2px solid #006341; padding-bottom: 5px; margin-bottom: 15px; }
+              .badge { display: inline-block; background: #d4af37; color: #003820; padding: 3px 10px; border-radius: 5px; font-weight: bold; font-size: 0.85em; margin-right: 6px; }
+              .status { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
+              .status.green { background: #28a745; }
+              .status.red { background: #dc3545; }
+              footer { background: #003820; color: #ccc; padding: 15px 20px; text-align: center; font-size: 0.9em; }
+            </style>
+          </head>
+          <body>
+            <header>
+              <h1>SMBC Bank – CI/CD Demo</h1>
+              <img src="https://raw.githubusercontent.com/nigelhenn/SMBC_CI_CD_Pipeline_Demo/main/assets/SMBC_logo.svg" alt="SMBC Bank Logo" />
+            </header>
+            <section class="hero">
+              <h2>Automating Secure & Compliant Deployments</h2>
+              <p>End-to-end CI/CD pipeline demo for SMBC Bank: Terraform, Ansible, Jenkins, and AWS in action.</p>
+            </section>
+            <main>
+              <div class="status-card">
+                <h3>Environment Status</h3>
+                <p><strong>Environment:</strong> Dev</p>
+                <p><strong>Deployed Instances:</strong> 8</p>
+                <p><span class="status green"></span> All instances healthy</p>
+              </div>
+              <div class="pipeline">
+                <h3>Pipeline Overview</h3>
+                <ul>
+                  <li><span class="badge">1</span> <strong>Source:</strong> GitHub triggers Jenkins.</li>
+                  <li><span class="badge">2</span> <strong>Build:</strong> Docker image created & scanned.</li>
+                  <li><span class="badge">3</span> <strong>Infra:</strong> Terraform provisions AWS resources.</li>
+                  <li><span class="badge">4</span> <strong>Config:</strong> Ansible applies security configs.</li>
+                  <li><span class="badge">5</span> <strong>Deploy:</strong> Dev → Test → Prod environments.</li>
+                  <li><span class="badge">6</span> <strong>Monitor:</strong> Logs, metrics, and alerts.</li>
+                </ul>
+              </div>
+              <p><em>Version:</em> 1.0 – <em>Deployed on:</em> <script>document.write(new Date().toLocaleDateString());</script></p>
+              <p><strong>Instance Public IP:</strong> {{ aws_ip.content }}</p>
+            </main>
+            <footer>
+              &copy; <script>document.write(new Date().getFullYear());</script> SMBC Bank. Demo project for DevOps/CI-CD best practices.
+            </footer>
+          </body>
+          </html>
+      notify:
+        - Reload Apache
 
     - name: Log deployment time and public IP
       lineinfile:
