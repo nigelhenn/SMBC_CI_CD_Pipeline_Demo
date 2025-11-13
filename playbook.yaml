@@ -10,6 +10,12 @@
         timeout: 300
         delay: 10
 
+    - name: Ensure system packages are up to date
+      yum:
+        name: "*"
+        state: latest
+    
+
     - name: Ensure Apache is installed
       yum:
         name: httpd
@@ -20,6 +26,27 @@
         name: httpd
         state: started
         enabled: true
+
+    - name: Ensure firewalld is installed and running
+      yum:
+        name: firewalld
+        state: present
+
+    - name: Start and enable firewalld
+      service:
+        name: firewalld
+        state: started
+        enabled: yes
+
+    - name: Allow HTTP and SSH services through the firewall
+      firewalld:
+        service: "{{ item }}"
+        permanent: yes
+        state: enabled
+      loop:
+        - http
+        - ssh
+      notify: Reload firewalld
 
     - name: Create SMBC Bank-themed HTML page for pipeline demo
       copy:
@@ -152,6 +179,7 @@
               </div>
 
               <p><em>Version:</em> 1.0 – <em>Deployed on:</em> <script>document.write(new Date().toLocaleDateString());</script></p>
+              <p><strong>Instance Public IP:</strong> {{ aws_ip.content }}</p>
             </main>
 
             <footer>
@@ -186,8 +214,20 @@
       debug:
         var: aws_ip.content
 
-  handlers:
+    - name: Log deployment time and public IP
+      lineinfile:
+        path: /var/log/deployment.log
+        create: yes
+        line: "Deployment completed on {{ ansible_date_time.iso8601 }} from Jenkins pipeline. Public IP: {{ aws_ip.content }}"
+    
+    handlers:
     - name: Reload Apache
       service:
         name: httpd
         state: reloaded
+
+    - name: Final summary
+      debug:
+        msg: >
+          ✅ {{ inventory_hostname }} configured successfully!
+          Website: http://{{ aws_ip.content }}
