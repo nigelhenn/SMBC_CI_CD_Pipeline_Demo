@@ -15,9 +15,8 @@ on:
 env:
   TF_VERSION: '1.9.0'
   AWS_REGION: eu-west-1
-  # For plan action: disable AWS resources to avoid credential requirement
-  # For apply action: enable AWS resources to provision infrastructure
   TF_VAR_enable_aws: ${{ github.event.inputs.action == 'apply' }}
+  AWS_EC2_METADATA_DISABLED: "true"
 
 permissions:
   contents: read
@@ -36,6 +35,15 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Set Dummy AWS Credentials for Plan
+        if: github.event.inputs.action != 'apply'
+        shell: bash
+        run: |
+          echo "AWS_ACCESS_KEY_ID=dummy" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=dummy" >> $GITHUB_ENV
+          echo "AWS_SESSION_TOKEN=dummy" >> $GITHUB_ENV
+          echo "AWS_DEFAULT_REGION=${AWS_REGION}" >> $GITHUB_ENV
 
       - name: Configure AWS Credentials
         if: github.event.inputs.action == 'apply'
@@ -57,6 +65,7 @@ jobs:
         run: terraform plan -out=tfplan
 
       - name: Upload Terraform Plan
+        if: github.event.inputs.action == 'plan'
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
