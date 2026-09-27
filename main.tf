@@ -1,10 +1,10 @@
 provider "aws" {
   region = var.region
-  # AWS credentials are expected from environment variables
 }
 
 resource "aws_instance" "web" {
-  count = var.instance_count
+  # Set enable_aws=false for validation/plan runs without AWS credentials
+  count = var.enable_aws ? var.instance_count : 0
   ami   = var.ami_id
 
   instance_type   = var.instance_type
