@@ -73,4 +73,3 @@ jobs:
           context: .
           push: false
           tags: smbc-app:${{ github.sha }}
-
