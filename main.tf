@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
 provider "aws" {
   region = var.region
 
@@ -7,7 +16,6 @@ provider "aws" {
 }
 
 resource "aws_instance" "web" {
-  # Set enable_aws=false for validation/plan runs without AWS credentials
   count = var.enable_aws ? var.instance_count : 0
   ami   = var.ami_id
 
