@@ -2,6 +2,12 @@ variable "region" {
   default = "eu-west-1"
 }
 
+variable "enable_aws" {
+  description = "Whether to create AWS resources. Set to false for credential-free validation and plans."
+  type        = bool
+  default     = false
+}
+
 variable "instance_count" {
   default = 8
 }
@@ -28,4 +34,3 @@ variable "environment" {
   type        = string
   default     = "dev"
 }
-
