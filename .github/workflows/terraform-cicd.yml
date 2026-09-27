@@ -15,6 +15,13 @@ on:
 env:
   TF_VERSION: '1.9.0'
   AWS_REGION: eu-west-1
+  # For plan action: disable AWS resources to avoid credential requirement
+  # For apply action: enable AWS resources to provision infrastructure
+  TF_VAR_enable_aws: ${{ github.event.inputs.action == 'apply' }}
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   terraform:
