@@ -10,8 +10,8 @@ RUN apt-get clean && \
       curl \
       unzip \
       python3-pip \
-      docker.io && \
-    pip3 install --no-cache-dir ansible && \
+      docker.io \
+      ansible && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
