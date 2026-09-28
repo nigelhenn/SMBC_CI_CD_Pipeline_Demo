@@ -9,7 +9,7 @@ RUN apt-get clean && \
     apt-get install -y --no-install-recommends \
       curl \
       unzip \
-      python3-pip \
+      python3-full \
       docker.io \
       ansible && \
     apt-get clean && \
